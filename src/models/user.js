@@ -1,3 +1,4 @@
+import { json } from 'express/lib/response';
 import Sequelize, { Model } from 'sequelize';
 
 class User extends Model {
@@ -5,7 +6,16 @@ class User extends Model {
     super.init(
       {
         initials: {
-          //exemplo de método que pode ser realizado para obter resultado de uma consulta                   
+          type: Sequelize.VIRTUAL,
+          get() {
+            const match = this.name.split(' ');
+
+            if(match.length > 1) {
+              return `${match[0][0]}${match[match.length -1][0]}`;
+            } else {
+              return `${match[0][0]}`;
+            }
+          }
         },
         name: Sequelize.STRING,
         email: Sequelize.STRING,
@@ -27,3 +37,5 @@ class User extends Model {
 
   }
 }
+
+export default User;
